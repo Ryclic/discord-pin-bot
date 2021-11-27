@@ -1,1 +1,1 @@
-Bot to circumvent the limited pin feature on Discord!
+Bot made to circumvent the limited pin feature on Discord!
