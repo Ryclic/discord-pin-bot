@@ -9,8 +9,6 @@ const client = new Client({
     ]
  })
 // connect to mongodb
-console.log(process.env.MONGODB_SRV);
-console.log(process.env.DISCORD_TOKEN);
 mongoose.connect(process.env.MONGODB_SRV, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

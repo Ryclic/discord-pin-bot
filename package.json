@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "discord.js": "^13.3.1",
-    "dotenv": "^10.0.0",
     "mongoose": "^6.0.13"
   },
   "name": "discord-pin-bot",
@@ -17,5 +16,8 @@
   "engines": {
     "node": "16.7.0",
     "npm": "7.20.3"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
   }
 }
