@@ -1,5 +1,5 @@
 const { Client, Intents } = require('discord.js');
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 require('dotenv').config();
 // discord intents
 const client = new Client({ 
@@ -9,16 +9,16 @@ const client = new Client({
     ]
  })
 // connect to mongodb
-// mongoose.connect(process.env.MONGODB_SRV, {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-// })
-// .then(() => {
-//     console.log('Successfully connected to the database!');
-// })
-// .catch((err) => {
-//     console.log(err);
-// })
+mongoose.connect(process.env.MONGODB_SRV, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => {
+    console.log('Successfully connected to the database!');
+})
+.catch((err) => {
+    console.log(err);
+})
 // connect to discord
 client.on('ready', () => {
     console.log('Bot is ready.');
