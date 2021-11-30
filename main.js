@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 require('dotenv').config();
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGODB_SRV, {
     useNewUrlParser: true,
