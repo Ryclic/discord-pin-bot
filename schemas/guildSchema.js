@@ -5,4 +5,4 @@ const guildSchema = new mongoose.Schema({
     votecount: { type: Number, default: 2},
 })
 
-module.exports = mongoose.model('guild', guildSchema, 'guild');
+module.exports = mongoose.model('guild', guildSchema);

@@ -18,7 +18,8 @@ module.exports = {
         // check if there is already document for current server, if not create one
         // if there is document then find and save given votecount
         mongoose.connection.db.collection('guild').count(async function(err, count) {
-            console.dir('Error while inserting votecount to database: ' + err);
+            if(err != undefined) console.dir('Error while inserting votecount to database: ' + err);
+            
             const doesExist = await guildSchema.exists({ serverID: interaction.guildId });
             if(!(doesExist)) {
                 console.log('No found records for current server, adding new record.');
@@ -27,7 +28,7 @@ module.exports = {
             else {
                 const guild = await guildSchema.find({ serverID: interaction.guildId });
                 guild[0].votecount = votecount;
-                await guild[0].save()
+                await guild[0].save();
             }
         });
         interaction.reply('Success! The votecount number has been set to ' + votecount + '.');
