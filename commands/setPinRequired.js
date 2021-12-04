@@ -17,7 +17,7 @@ module.exports = {
         const data = {serverID: interaction.guildId, votecount: votecount}
         // check if there is already document for current server, if not create one
         // if there is document then find and save given votecount
-        mongoose.connection.db.collection('guilds').count(async function(err, count) {
+        mongoose.connection.db.collection('guild').count(async function(err, count) {
             console.dir('Error while inserting votecount to database: ' + err);
             const doesExist = await guildSchema.exists({ serverID: interaction.guildId });
             if(!(doesExist)) {
