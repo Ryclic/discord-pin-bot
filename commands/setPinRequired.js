@@ -31,6 +31,6 @@ module.exports = {
                 await guild[0].save();
             }
         });
-        interaction.reply('Success! The votecount number has been set to ' + votecount + '.');
+        interaction.reply({ content: 'Success! The votecount number has been set to ' + votecount + '.', ephemeral: true });
 	},
 };
