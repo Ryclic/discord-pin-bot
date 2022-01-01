@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const guildSchema = require('../schemas/guildSchema.js');
+const guildSchema = require('../schemas/guildInfoSchema.js');
 const mongoose = require('mongoose');
 
 module.exports = {
@@ -31,6 +31,6 @@ module.exports = {
                 await guild[0].save();
             }
         });
-        interaction.reply({ content: 'Success! The votecount number has been set to ' + votecount + '.', ephemeral: true });
+        interaction.reply({ content: 'Success! The required number of people to pin has been set to ' + votecount + '.', ephemeral: true });
 	},
 };

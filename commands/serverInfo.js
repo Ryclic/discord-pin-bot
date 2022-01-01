@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const guildSchema = require('../schemas/guildSchema.js');
+const guildSchema = require('../schemas/guildInfoSchema.js');
 const mongoose = require('mongoose');
 module.exports = {
 	data: new SlashCommandBuilder()

@@ -6,4 +6,4 @@ const messageSchema = new mongoose.Schema({
     datePinned: { type: String }
 })
 
-module.exports = mongoose.model('message', guildSchema);
+module.exports = mongoose.model('message', messageSchema);
