@@ -48,7 +48,7 @@ client.on('interactionCreate', async (interaction) => {
 	if (!command) return;
     // execute the command
 	try {
-		await command.execute(interaction);
+		await command.execute(interaction, client);
 	} catch (error) {
 		console.log(error);
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
@@ -61,11 +61,10 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
     await channel.messages.fetch();
 
     if(messageReaction.emoji.name == '📌'){
-        // check if emoji count is greater than the default or configured number required to pin thru votecount in db, if so then call pinMessage.js
+        // check if emoji count is greater than the default or configured number required to pin thru votecount in db
         const guildID = messageReaction.message.guild.id;
         const reqVotecount = (await guildSchema.find({ serverID: guildID }))[0].votecount;
         const reactionCount = messageReaction.message.reactions.cache.get('📌').count;
-        channel.send('Test!');
         if(reactionCount >= reqVotecount){
             // write code to put message in db
             console.log('Message pinned!');
