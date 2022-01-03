@@ -14,28 +14,17 @@ module.exports = {
             thumbnail: {
               url: guild.iconURL()
             },
-            title: "This is your title, it can hold 256 characters",
-            url: "https://discord.js.org/#/docs/main/master/class/MessageEmbed",
-            description: "This is the main body of text, it can hold 2048 characters.",
+            title: 'Server info of ***"' + interaction.guild.name + '"***',
             fields: [{
-              name: "This is a single field title, it can hold 256 characters",
-              value: "This is a field value, it can hold 1024 characters.",
+              name: 'General Info',
+              value: 'Member Count: ' + interaction.guild.memberCount + '\n Owner: ' + client.users.cache.get(interaction.guild.ownerId).tag + 
+              '\n Time Created: ' + interaction.guild.createdAt,
               inline: false
             },
             {
-              name: "Inline fields",
-              value: "They can have different fields with small headlines, and you can inline them.",
-              inline: true
-            },
-            {
-              name: "Masked links",
-              value: "You can put [masked links](https://discord.js.org/#/docs/main/master/class/MessageEmbed) inside of rich embeds.",
-              inline: true
-            },
-            {
-              name: "Markdown",
-              value: "You can put all the *usual* **__Markdown__** inside of them.",
-              inline: true
+              name: 'Bot Info',
+              value: 'Required people to pin: ' + (await guildSchema.find({ serverID: interaction.guildId }))[0].votecount,
+
             },
             {
               name: "\u200b",
