@@ -21,12 +21,12 @@ mongoose.connect(process.env.MONGODB_SRV, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
-.then(() => {
-    console.log('Successfully connected to the database!');
-})
-.catch((err) => {
-    console.log(err);
-})
+    .then(() => {
+        console.log('Successfully connected to the database!');
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 
 // connect to Discord
 client.on('ready', () => {
@@ -56,22 +56,23 @@ client.on('guildCreate', guild => {
             author: { type: String },
             replyTo: { type: String },
         }));
+
         console.log('Existing collection not found, creating a new collection for this server!');
     }
-
-    
 })
 
 client.on('guildDelete', async guild => {
     console.log('Left a guild: ' + guild.name);
     console.log('Server ID: ' + guild.id);
-    // NOTE: This function drops all pins when the bot leaves server
-    // var db = mongoose.model(guild.id);
-    // await db.collection.drop().then(() => {
-    //     console.log('Collection successfully dropped!');
-    // }).catch(() => {
-    //     console.log('Collection was not able to be dropped.')
-    // });
+/*
+    NOTE: This function drops all pins when the bot leaves server
+    var db = mongoose.model(guild.id);
+    await db.collection.drop().then(() => {
+        console.log('Collection successfully dropped!');
+    }).catch(() => {
+        console.log('Collection was not able to be dropped.')
+    });
+*/
 })
 
 // slash commands
@@ -102,17 +103,33 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
         const reactionCount = messageReaction.message.reactions.cache.get('📌').count;
 
         if(reactionCount >= reqVotecount){
-            if(message.attachments){
-                // check for empty message, only attachment
-                if(message.content) message.channel.send(message.content);
-                // store attachments
+            // -- check for reply to references -- 
+            message.fetchReference()
+                .then(msg => {
+                    // first is content, second is origin message sender
+                    const replyTo = [];
+                    replyTo.push(msg.content);
+                    replyTo.push(msg.author.id);
+                    // ----------------!WRITE CODE TO INSERT INTO MONGODB!---------------
+                    
+                })
+                .catch(err => {
+                    console.log('No message reference found!')
+                });
+            
+            // -- text message with attachment --
+            if(message.attachments.length > 0){
+                const attachments = [];
                 for(at of message.attachments){
-                    message.channel.send({
-                        files: [{
-                            attachment: at[1].url
-                        }]
-                    })
+                    attachments.push(at);
                 }
+                // ----------------!WRITE CODE TO INSERT INTO MONGODB!---------------
+                // check for empty message, only attachment
+                // if(message.content) message.channel.send(message.content);
+
+            }
+            // -- just a normal text message -- 
+            else{
 
             }
             console.log('Message pinned!');
@@ -121,3 +138,17 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
 })
 client.login(process.env.DISCORD_TOKEN);
 
+
+/*
+                for(at of message.attachments){
+                    message.channel.send({
+                        files: [{
+                            attachment: at[1].url
+                        }]
+                    })
+                }
+
+
+                // use this to access the properties of a specific attachment
+                console.log(attachments[1][1].url);
+*/
