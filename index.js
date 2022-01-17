@@ -96,10 +96,25 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
 
     if(messageReaction.emoji.name == '📌'){
         const guildID = messageReaction.message.guild.id;
+        const message = messageReaction.message;
+
         const reqVotecount = (await guildSchema.find({ serverID: guildID }))[0].votecount;
         const reactionCount = messageReaction.message.reactions.cache.get('📌').count;
+
         if(reactionCount >= reqVotecount){
-            
+            if(message.attachments){
+                // check for empty message, only attachment
+                if(message.content) message.channel.send(message.content);
+                // store attachments
+                for(at of message.attachments){
+                    message.channel.send({
+                        files: [{
+                            attachment: at[1].url
+                        }]
+                    })
+                }
+
+            }
             console.log('Message pinned!');
         }
     }
