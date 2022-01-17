@@ -16,13 +16,13 @@ module.exports = {
             },
             title: 'Server info of ***"' + interaction.guild.name + '"***',
             fields: [{
-              name: 'General Info',
+              name: '----------------\n General Info \n----------------',
               value: 'Member Count: ' + interaction.guild.memberCount + '\n Owner: ' + client.users.cache.get(interaction.guild.ownerId).tag + 
               '\n Time Created: ' + interaction.guild.createdAt,
               inline: false
             },
             {
-              name: 'Bot Info',
+              name: '----------------\n Bot Info \n----------------',
               value: 'Required people to pin: ' + (await guildSchema.find({ serverID: interaction.guildId }))[0].votecount,
 
             },

@@ -100,7 +100,6 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
         const reactionCount = messageReaction.message.reactions.cache.get('📌').count;
         if(reactionCount >= reqVotecount){
             
-
             console.log('Message pinned!');
         }
     }
