@@ -1,8 +1,12 @@
-// setup
+// -- Setup -- //
 const { Client, Intents, Collection } = require('discord.js');
+
 const mongoose = require('mongoose');
-const fs = require('fs')
 const guildSchema = require('./schemas/guildInfoSchema.js');
+
+const fs = require('fs')
+require('dotenv').config();
+
 const client = new Client({ 
     intents: [
         Intents.FLAGS.GUILDS,
@@ -15,8 +19,8 @@ const client = new Client({
         'REACTION'
     ]
  })
-require('dotenv').config();
-// connect to MongoDB
+
+// -- Connect to MongoDB -- //
 mongoose.connect(process.env.MONGODB_SRV, {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -28,7 +32,17 @@ mongoose.connect(process.env.MONGODB_SRV, {
         console.log(err);
     })
 
-// connect to Discord
+// -- Pin Schema -- // 
+const messageSchema = new mongoose.Schema({
+    textValue: { type: String, require: true},
+    attachmentUrls: { type: Array, require: false},
+    replyTo: { type: Array, require: false},
+    dateSent: { type: Date, require: true, default: undefined},
+    datePinned: { type: Date, default: Date.now},
+    author: { type: Array, require: true}
+});
+var Message = {};
+// connect to discord
 client.on('ready', () => {
     console.log('Bot is ready.');
 })
@@ -40,24 +54,20 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.data.name, command);
 }
-
+// -- Guild Join/Leave Events -- //
 client.on('guildCreate', guild => {
     console.log('Joined a new guild: ' + guild.name);
     console.log('Server ID: '+ guild.id);
-    // create a messages collection for each server when join
-    try{    
-        guild = mongoose.model(guild.id)
-    } catch (err) {
-        mongoose.model(guild.id, new mongoose.Schema({ 
-            attachments: [{ type: String }],
-            textValue: { type: String, require: true},
-            messageID: { type: Number, default: 2},
-            datePinned: { type: String },
-            author: { type: String },
-            replyTo: { type: String },
-        }));
 
-        console.log('Existing collection not found, creating a new collection for this server!');
+    // create a messages collection for each server when join
+    try{
+        // attempt to access the schema to check for existance 
+        guild = mongoose.model(guild.id);
+    } catch (err) {
+
+        message = mongoose.model(guild.id, messageSchema);
+
+        console.log('Existing collection not found, created a new collection for this server!');
     }
 })
 
@@ -91,13 +101,14 @@ client.on('interactionCreate', async (interaction) => {
 })
 
 client.on('messageReactionAdd', async (messageReaction, user) => {
-    
+    // load old messages into cache
     const channel = client.channels.cache.get(messageReaction.message.channelId);
-    await channel.messages.fetch(); // load old messages into cache
-
+    await channel.messages.fetch(); 
+    
     if(messageReaction.emoji.name == '📌'){
         const guildID = messageReaction.message.guild.id;
         const message = messageReaction.message;
+        const serverDB = mongoose.connection.db.collection(guildID);
 
         const reqVotecount = (await guildSchema.find({ serverID: guildID }))[0].votecount;
         const reactionCount = messageReaction.message.reactions.cache.get('📌').count;
@@ -130,7 +141,11 @@ client.on('messageReactionAdd', async (messageReaction, user) => {
             }
             // -- just a normal text message -- 
             else{
-
+                const content = message.content;
+                const msg = new Message({ textValue : content });
+                msg.save();
+                
+                // mongoose.connection.db.collection(guildID)
             }
             console.log('Message pinned!');
         }
