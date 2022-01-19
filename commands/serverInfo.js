@@ -1,14 +1,15 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const guildSchema = require('../schemas/guildInfoSchema.js');
 const mongoose = require('mongoose');
+
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('serverinfo')
 		.setDescription('Returns basic server information, including votecount number.'),
 
 	async execute(interaction, client) {
-
         const guild = client.guilds.cache.get(interaction.guildId);
+        
 ;        interaction.reply({ embeds: [{
             color: 0xff001e,
             thumbnail: {
